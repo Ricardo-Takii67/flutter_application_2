@@ -11,13 +11,16 @@ class FormularioExemplo extends StatefulWidget {
 
 class _FormularioExemploState extends State<FormularioExemplo> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _senhaController = TextEditingController();
+  final _nomeController = TextEditingController();
+  final _especieController = TextEditingController();
+  final _idadeController = TextEditingController();
+  final _castradoController = TextEditingController();
+  bool _aceitouTermos = false;
 
   void _submeterFormulario() {
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Processando dados de ${_emailController.text}...')),
+        SnackBar(content: Text('Processando dados de ${_nomeController.text}...')),
       );
     }
   }
@@ -33,38 +36,67 @@ class _FormularioExemploState extends State<FormularioExemplo> {
           child: ListView(
             children: [
               TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
+                controller: _nomeController,
                 decoration: const InputDecoration(
-                  labelText: 'E-mail',
+                  labelText: 'Nome do Pet',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value == null || !value.contains('@')) {
-                    return 'Informe um e-mail válido!';
+                  if (value == null) {
+                    return 'Informe um nome válido!';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField(
+                items: const [
+                   DropdownMenuItem(value: "gato", child: Text('Gato')),
+                   DropdownMenuItem(value: "dog", child: Text('Dog')),
+                   DropdownMenuItem(value: "pinto", child: Text('Pinto')),
+                   DropdownMenuItem(value: "jabuti", child: Text('Jabuti')),
+                ],
+                onChanged: (value) {
+                  _especieController.text = value!;
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Espécie inválida!';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _senhaController,
-                obscureText: true,
+                controller: _idadeController,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
-                  labelText: 'Senha',
+                  labelText: 'Idade em anos do pet',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value == null || value.length < 6) {
-                    return 'A senha deve ter pelo menos 6 caracteres!';
+                  if (value == null) {
+                    return 'Idade inválida!';
                   }
                   return null;
                 },
               ),
+              
+               CheckboxListTile(
+                title: const Text('Aceito os termos de castração'),
+                subtitle: const Text(
+                'Aceito os termos'),
+                value: _aceitouTermos,
+                onChanged: (novoValor){
+                  setState(() {
+                    _aceitouTermos = novoValor ?? false;
+                  });
+                },
+               ),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _submeterFormulario,
-                child: const Text('Cadastrar'),
+                child: const Text('Cadastrar pet'),
               ),
             ],
           ),
