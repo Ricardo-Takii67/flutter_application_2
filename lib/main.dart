@@ -14,7 +14,6 @@ class _FormularioExemploState extends State<FormularioExemplo> {
   final _nomeController = TextEditingController();
   final _especieController = TextEditingController();
   final _idadeController = TextEditingController();
-  final _castradoController = TextEditingController();
   bool _aceitouTermos = false;
 
   void _submeterFormulario() {
@@ -75,7 +74,7 @@ class _FormularioExemploState extends State<FormularioExemplo> {
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value == null) {
+                  if (value == null || value.isEmpty) {
                     return 'Idade inválida!';
                   }
                   return null;
